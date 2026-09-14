@@ -1,0 +1,56 @@
+seed: 42
+
+dataset:
+  frequency_minutes: 30
+  lookback_steps: 96
+  horizon_steps: 48
+  target: net_load_mw
+  past_features:
+    - net_load_mw
+    - irradiance
+    - temperature
+    - hour_sin
+    - hour_cos
+    - dow_sin
+    - dow_cos
+    - doy_sin
+    - doy_cos
+    - session
+  future_features:
+    - irradiance
+    - temperature
+    - hour_sin
+    - hour_cos
+    - dow_sin
+    - dow_cos
+    - doy_sin
+    - doy_cos
+    - session
+
+backtest:
+  n_folds: 10
+  initial_train_months: 12
+  test_months: 6
+  step_months: 3
+  calibration_fraction: 0.10
+
+model:
+  hidden_dim: 256
+  hidden_layers: 2
+  activation: silu
+  point_dropout: 0.0
+  mcd_dropout: 0.10
+  learning_rate: 0.001
+  epochs: 80
+  batch_size: 128
+  weight_decay: 0.0
+  l1_l2_lambda: 0.5
+  mc_samples: 100
+  quantiles: [0.05, 0.50, 0.95]
+
+conformal:
+  alpha: 0.10
+
+runtime:
+  device: auto
+  num_workers: 0
