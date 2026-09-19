@@ -32,6 +32,22 @@ MLP 点预测（point forecast）
 
 这个 Notebook 不依赖本目录下的 `src/` 代码，数据下载、SPS-UK 预处理、MLPF clean-room 实现、Split Conformal、absolute/signed residual 实验、MLP-QR、MLP-MCD、NRMSE/PICP/NMPI 和结果图都放在同一个文件里。适合学习和逐步修改；现有模块化代码仍保留，作为早期复现记录。
 
+## 已执行结果（SPS-UK）
+
+当前仓库已经提交 SPS-UK 二进制数据包：
+
+`data/SPS-UK_dataset.zip`
+
+并完成了 7 个可行 expanding-window folds 的端到端运行。结果位于：
+
+```text
+results/sps-uk-executed/metrics_by_fold.csv
+results/sps-uk-executed/metrics_summary.csv
+results/sps-uk-executed/run_config.json
+```
+
+单 Notebook `Conformal_MLPF_SPS_UK_reproduction.ipynb` 已同步写入本次实际运行结果。当前属于方法级 clean-room reproduction，不声称数值级复现论文 Table I；关键未公开细节及运行假设均在 Notebook 中说明。
+
 ## 本复现项目做了什么
 
 本目录不是只提供一个 Notebook，而是尽量把论文从数据到结果的流程完整串起来：
