@@ -1,0 +1,43 @@
+name: Execute Suresh 2025 ACI notebook
+
+on:
+  push:
+    paths:
+      - ".github/workflows/execute-suresh-aci.yml"
+      - "papers/2025-kbs-mamba-aci/Suresh_2025_ACI_SPS_UK_reproduction.ipynb"
+      - "papers/2025-kbs-mamba-aci/requirements.txt"
+
+permissions:
+  contents: write
+
+jobs:
+  execute:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: papers/2025-kbs-mamba-aci/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r papers/2025-kbs-mamba-aci/requirements.txt
+
+      - name: Execute notebook
+        working-directory: papers/2025-kbs-mamba-aci
+        run: |
+          jupyter nbconvert             --to notebook             --execute Suresh_2025_ACI_SPS_UK_reproduction.ipynb             --inplace             --ExecutePreprocessor.timeout=900             --ExecutePreprocessor.kernel_name=python3
+
+      - name: Commit executed notebook
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add papers/2025-kbs-mamba-aci/Suresh_2025_ACI_SPS_UK_reproduction.ipynb
+          if git diff --cached --quiet; then
+            echo "Notebook already contains current outputs."
+            exit 0
+          fi
+          git commit -m "Execute Suresh 2025 ACI notebook [skip ci]"
+          git push
