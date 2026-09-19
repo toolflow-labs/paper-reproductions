@@ -1,0 +1,16 @@
+{
+  "dataset": "SPS-UK",
+  "source_archive": "data/SPS-UK_dataset.zip",
+  "source_csv_git_blob_shas": {
+    "demand_train_set4.csv": "ac2f7b9c75a97d5af5f0f0553a00ebf0db406191",
+    "pv_train_set4.csv": "d0df197cedb00814c4ff7b94e13b711046f0c6c3",
+    "weather_train_set4.csv": "52c7d97d109e240e309fc6c2a1a6ddcc93001947"
+  },
+  "epochs": 3,
+  "batch_size": 1024,
+  "mc_draws": 20,
+  "lookback_steps": 96,
+  "horizon_steps": 48,
+  "alpha": 0.1,
+  "note": "Fully executed clean-room reproduction on CPU. The paper does not report a final epoch count; 3 epochs were used to complete all feasible expanding-window folds in this environment. Results are methodological reproduction, not claimed as exact Table I replication."
+}
