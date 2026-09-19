@@ -24,6 +24,14 @@ MLP 点预测（point forecast）
 覆盖率、区间宽度等概率预测指标
 ```
 
+## 推荐入口：单 Notebook
+
+为了方便逐格阅读论文、数据和方法，现在优先推荐直接打开：
+
+`Conformal_MLPF_SPS_UK_reproduction.ipynb`
+
+这个 Notebook 不依赖本目录下的 `src/` 代码，数据下载、SPS-UK 预处理、MLPF clean-room 实现、Split Conformal、absolute/signed residual 实验、MLP-QR、MLP-MCD、NRMSE/PICP/NMPI 和结果图都放在同一个文件里。适合学习和逐步修改；现有模块化代码仍保留，作为早期复现记录。
+
 ## 本复现项目做了什么
 
 本目录不是只提供一个 Notebook，而是尽量把论文从数据到结果的流程完整串起来：
