@@ -80,6 +80,28 @@ jupyter lab
 
 如果从仓库根目录运行 Notebook，它也会自动搜索上一项复现中的 `SPS-UK_dataset.zip`。
 
+## 已执行结果（SPS-UK）
+
+Notebook 已在 GitHub Actions 上从头执行并把输出写回仓库。当前一次执行得到：
+
+| Method | Coverage | Coverage error vs 90% | MIW | Winkler |
+|---|---:|---:|---:|---:|
+| Static Split CP | 88.77% | 1.23% | 3.0747 | 4.1077 |
+| ACI | 90.48% | 0.48% | 2.9810 | 3.4604 |
+
+同一次运行的 LSTM 点预测结果为：
+
+- Test RMSE = 0.9500
+- Test MAE = 0.7371
+
+这些数值只说明在 SPS-UK 替代数据上的 clean-room reproduction 中，ACI 相比固定 Split CP 更接近 90% 目标 Coverage，同时这次运行里区间还略窄、Winkler 更低；它们不能与论文 Tamil Nadu 数据上的 MW 数值直接比较。
+
+代码里将论文公式中的固定目标误覆盖率记为 `alpha_target`，把随时间变化的状态记为 `alpha_t`，避免二者混淆：
+
+```python
+alpha_t = alpha_t + gamma * (alpha_target - err)
+```
+
 ## 本复现最重要的观察
 
 不要把 ACI 理解成“另一个预测模型”。它更像一个覆盖率反馈器：
