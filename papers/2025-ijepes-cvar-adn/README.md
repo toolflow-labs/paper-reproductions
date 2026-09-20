@@ -4,30 +4,60 @@ Paper: Shiwei Xia et al. (2025), *Source-network-load-storage collaborated two-s
 
 DOI: `10.1016/j.ijepes.2025.111120`
 
-## Scope
+## Current implementation
 
-This is a **method-level clean-room reproduction**, not an exact numerical reproduction.
+The reproduction now uses **pandapower** for the IEEE 33-bus network and full balanced AC power-flow calculations.
 
-The main artifact is the **self-contained** `cvar_adn_reproduction.ipynb`: the full scenario-generation, IEEE 33-bus setup, CVaR formulation, ESS dispatch optimization, Case 1/2/3 comparison, and sensitivity experiment are visible directly in notebook cells. It no longer hides the implementation behind a single `%run` cell.
+The main notebook is self-contained:
 
-## Data used
+- `cvar_adn_reproduction.ipynb`
 
-No public raw dataset was released with the paper. This reproduction therefore uses:
+Reusable script versions are also kept:
 
-- the standard IEEE 33-bus / MATPOWER `case33bw` network data;
-- paper-specified WT/PV/ESS placements and capacities;
-- 24 h load/PV/WT baseline curves reconstructed from the trend of the paper's Fig. 8;
-- synthetic correlated forecast-error scenarios generated from those baselines (1000 raw scenarios → 20 representative scenarios).
+- `scenario_setup.py`
+- `dispatch_cvar.py`
 
-See `REPRODUCTION_NOTES.md` for the exact boundary between paper-specified settings and reproduction assumptions.
+## Method
 
-## Files
+The workflow is:
 
-- `cvar_adn_reproduction.ipynb` — **complete self-contained notebook**.
-- `scenario_setup.py` — same scenario/network setup extracted as a reusable script.
-- `dispatch_cvar.py` — same CVaR/ESS dispatch experiment extracted as a reusable script.
-- `REPRODUCTION_NOTES.md` — assumptions and deviations from the paper.
-- `requirements.txt` — Python dependencies.
+```text
+forecast-error scenarios
+    -> 1000 raw scenarios
+    -> 20 representative scenarios
+    -> pandapower AC power flow for every scenario-hour
+    -> AC finite-difference sensitivities dV/dP_storage and dP_grid/dP_storage
+    -> 24 h two-ESS stochastic/CVaR scheduling LP
+    -> full pandapower AC validation of the selected schedules
+```
+
+This is more rigorous than the earlier hand-written LinDistFlow version. The final reported voltage, grid-import and line-loss metrics are obtained from `pandapower.runpp()`, not from LinDistFlow.
+
+The optimization layer still uses SciPy/HiGHS because the paper couples 20 scenarios, 24 time steps, inter-temporal SOC constraints and CVaR. That multi-scenario, multi-period problem is not a single native pandapower `runopp()` call.
+
+## Network and paper settings retained
+
+- IEEE 33-bus benchmark via `pandapower.networks.case33bw()`
+- 12.66 kV benchmark system
+- WT: buses 17/32, 0.9 MW each
+- PV: buses 21/24, 0.6 MW each
+- ESS: bus 15, 1.8 MWh / 0.3 MW
+- ESS: bus 32, 1.0 MWh / 0.2 MW
+- 24 h, 1 h resolution
+- 1000 uncertainty scenarios -> 20 representative scenarios
+- paper-style Case 1 / Case 2 / Case 3 comparison
+- CVaR tail-risk objective
+
+## Data limitation
+
+The paper does not publish the original WT/PV/load time series or official implementation. The reproduction therefore uses:
+
+- the standard pandapower IEEE 33-bus network;
+- paper-specified device placements/capacities;
+- 24 h load/PV/WT baseline profiles reconstructed from the trend of Fig. 8;
+- synthetic correlated forecast-error scenarios.
+
+See `REPRODUCTION_NOTES.md` for all substitutions.
 
 ## Run
 
@@ -36,18 +66,10 @@ pip install -r requirements.txt
 jupyter lab cvar_adn_reproduction.ipynb
 ```
 
-or run the script form:
+or:
 
 ```bash
 python dispatch_cvar.py
 ```
 
-## Expected qualitative result
-
-The intended reproduction target is the paper's central direction:
-
-- ESS reduces expected operating cost / peak import relative to no ESS;
-- adding the CVaR tail-risk term can slightly increase expected economic cost;
-- in exchange, tail voltage-risk metrics improve.
-
-This repository does **not** claim exact reproduction of Tables 4–6 because the paper does not publish all original inputs or official code.
+The GitHub Actions workflow `.github/workflows/execute-cvar-adn.yml` executes the notebook and commits the current outputs when the notebook or requirements change.
