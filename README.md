@@ -2,6 +2,10 @@
 
 Clean-room reproductions of research papers, with an emphasis on end-to-end pipelines: data acquisition, preprocessing, experiments, metrics, and figures.
 
+## Tutorials
+
+- [pandapower 入门：把“潮流仿真”理解成一次网络状态计算](tutorials/pandapower_power_flow_intro.ipynb) — 从一个小型 0.4 kV 辐射台区出发，依次理解 bus / load / sgen / storage / runpp / res_*，再衔接 PV 反向潮流、BESS、时间序列 AC 回放和 IEEE 33-bus。
+
 ## Reproductions
 
 | Year | Paper | Status |
