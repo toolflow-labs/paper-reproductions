@@ -11,9 +11,11 @@ Clean-room reproductions of research papers, with an emphasis on end-to-end pipe
 | Year | Paper | Status |
 |---|---|---|
 | 2024 | [Conformal Multilayer Perceptron-Based Probabilistic Net-Load Forecasting for Low-Voltage Distribution Systems with Photovoltaic Generation](papers/2024-smartgridcomm-conformal-mlpf/) | Initial reproduction |
+| 2024 | [Conformal prediction for stochastic decision-making of PV power in electricity markets](papers/2024-epsr-conformal-pv-market-bidding/) | CP/CPS → Newsvendor/EUM/CVaR market-decision reproduction |
 | 2025 | [Mamba based adaptive conformal inference for probabilistic short-term load forecasting](papers/2025-kbs-mamba-aci/) | ACI core-method reproduction on SPS-UK |
 | 2025 | [Source-network-load-storage collaborated two-stage power dispatch of active distribution network with conditional value-at-risk](papers/2025-ijepes-cvar-adn/) | Method-level CVaR/ESS risk-dispatch reproduction |
 | 2026 | [Stepwise Conformal Prediction for Multi-Step Net Load Forecasting in Microgrids Under Renewable Energy Variability](papers/2026-energies-stepwise-conformal-dispatch/) | Stepwise CQR + PV-ramping + rolling BESS method reproduction |
 | 2026 | [Calibration-Aware Risk Scheduling for PV–BESS–EV Charging Stations Using Monotonic Quantile Forecasting and Dependence-Preserving Scenarios](papers/2026-ssrn-calibration-aware-risk-scheduling/) | Transformer quantiles + calibration + Copula scenarios + CVaR/BESS reproduction |
+| 2026 | [Techno-economic assessment of the realisable economic value and value capture gap of probabilistic PV forecasting in PV-battery microgrid dispatch](papers/2026-seta-pv-forecast-dispatch-value/) | Decision-value / perfect-information / recourse-boundary experiment skeleton |
 
 Each paper folder separates paper-specified settings from assumptions required when the publication leaves implementation details unspecified.
