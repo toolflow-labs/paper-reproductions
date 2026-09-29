@@ -1,0 +1,36 @@
+name: smoke-guo-decision-value-and-renkema-bidding
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "papers/2026-seta-pv-forecast-dispatch-value/**"
+      - "papers/2024-epsr-conformal-pv-market-bidding/**"
+      - ".github/workflows/smoke-guo-decision-value-and-renkema-bidding.yml"
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest
+          pip install -r papers/2026-seta-pv-forecast-dispatch-value/requirements.txt
+          pip install -r papers/2024-epsr-conformal-pv-market-bidding/requirements.txt
+      - name: Guo unit tests
+        run: python -m pytest -q papers/2026-seta-pv-forecast-dispatch-value/tests
+      - name: Renkema unit tests
+        run: python -m pytest -q papers/2024-epsr-conformal-pv-market-bidding/tests
+      - name: Guo smoke reproduction
+        working-directory: papers/2026-seta-pv-forecast-dispatch-value
+        run: python reproduction.py --smoke --out results/ci
+      - name: Renkema smoke reproduction
+        working-directory: papers/2024-epsr-conformal-pv-market-bidding
+        run: python reproduction.py --smoke --out results/ci
