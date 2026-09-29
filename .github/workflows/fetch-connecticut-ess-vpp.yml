@@ -1,0 +1,41 @@
+name: Fetch Connecticut ESS VPP data
+
+on:
+  push:
+    branches:
+      - data/connecticut-ess-vpp-2026-09-29
+    paths:
+      - .github/workflows/fetch-connecticut-ess-vpp.yml
+
+permissions:
+  contents: write
+
+jobs:
+  fetch-data:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+        with:
+          ref: data/connecticut-ess-vpp-2026-09-29
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Download and profile official datasets
+        run: python datasets/connecticut-ess-vpp/download_and_profile.py
+
+      - name: Commit snapshot
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add datasets/connecticut-ess-vpp
+          if git diff --cached --quiet; then
+            echo "No dataset changes to commit."
+          else
+            git commit -m "data: add Connecticut ESS VPP snapshot"
+            git push origin HEAD:data/connecticut-ess-vpp-2026-09-29
+          fi
