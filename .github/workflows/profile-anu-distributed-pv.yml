@@ -1,0 +1,29 @@
+name: Profile ANU distributed PV dataset
+
+on:
+  push:
+    branches:
+      - data/anu-distributed-pv-1287-2026-09-29
+    paths:
+      - .github/workflows/profile-anu-distributed-pv.yml
+
+permissions:
+  contents: read
+
+jobs:
+  profile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Download from official Zenodo record and profile locally
+        run: python datasets/anu-distributed-pv-1287/download_and_profile.py
+
+      - name: Show generated profile
+        run: |
+          echo "Generated local profile (not committed because source data is non-redistributable):"
+          sed -n '1,220p' datasets/anu-distributed-pv-1287/DATASET.local.md
