@@ -20,30 +20,6 @@ jobs:
           python-version: '3.11'
       - name: Install inspection tools
         run: pip install gdown python-docx pandas
-      - name: Download official CANVAS sample data folder
-        run: |
-          mkdir -p /tmp/canvas-data
-          gdown --folder 'https://drive.google.com/drive/folders/1pQ3h7HCYYzm1rxQpw1sw4qD8-uZYcZ5R?usp=sharing' -O /tmp/canvas-data
-      - name: Show files and basic schemas
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-          import pandas as pd
-          root=Path('/tmp/canvas-data')
-          files=[p for p in root.rglob('*') if p.is_file()]
-          print('FILE_COUNT', len(files))
-          print('TOTAL_BYTES', sum(p.stat().st_size for p in files))
-          for p in files:
-              print('FILE', p.relative_to(root), p.stat().st_size)
-          print('\nSCHEMAS')
-          for p in files:
-              if p.suffix.lower() == '.csv':
-                  try:
-                      df=pd.read_csv(p, nrows=3)
-                      print('CSV', p.relative_to(root), 'COLUMNS=', list(df.columns), 'SAMPLE_ROWS=', len(df))
-                  except Exception as e:
-                      print('CSV_ERROR', p.relative_to(root), repr(e))
-          PY
       - name: Read upstream dataset documentation
         run: |
           git clone --depth 1 https://github.com/UNSW-CEEM/Solar-Curtailment.git /tmp/solar-curtailment
@@ -61,4 +37,20 @@ jobs:
               for row in table.rows:
                   print(' | '.join(c.text.replace('\n',' / ') for c in row.cells))
           print('DOC_TEXT_END')
+          PY
+      - name: Try official CANVAS sample data folder
+        continue-on-error: true
+        run: |
+          mkdir -p /tmp/canvas-data
+          gdown --folder 'https://drive.google.com/drive/folders/1pQ3h7HCYYzm1rxQpw1sw4qD8-uZYcZ5R?usp=sharing' -O /tmp/canvas-data
+      - name: Show downloaded files if any
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          root=Path('/tmp/canvas-data')
+          files=[p for p in root.rglob('*') if p.is_file()] if root.exists() else []
+          print('FILE_COUNT', len(files))
+          print('TOTAL_BYTES', sum(p.stat().st_size for p in files))
+          for p in files:
+              print('FILE', p.relative_to(root), p.stat().st_size)
           PY
