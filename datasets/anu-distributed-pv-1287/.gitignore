@@ -1,0 +1,6 @@
+# ANU dataset license prohibits redistribution.
+raw/*
+!raw/.gitkeep
+
+# Locally generated profile after downloading the licensed data.
+DATASET.local.md

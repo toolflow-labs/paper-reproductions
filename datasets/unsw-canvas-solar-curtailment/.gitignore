@@ -1,0 +1,6 @@
+# Upstream/source data is fetched locally only.
+raw/*
+!raw/.gitkeep
+
+# Local inspection outputs.
+DATASET.local.md
