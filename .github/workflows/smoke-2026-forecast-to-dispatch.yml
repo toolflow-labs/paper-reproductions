@@ -1,0 +1,36 @@
+name: smoke-2026-forecast-to-dispatch
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "papers/2026-energies-stepwise-conformal-dispatch/**"
+      - "papers/2026-ssrn-calibration-aware-risk-scheduling/**"
+      - ".github/workflows/smoke-2026-forecast-to-dispatch.yml"
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest
+          pip install -r papers/2026-energies-stepwise-conformal-dispatch/requirements.txt
+          pip install -r papers/2026-ssrn-calibration-aware-risk-scheduling/requirements.txt
+      - name: Unit tests
+        run: |
+          python -m pytest -q papers/2026-energies-stepwise-conformal-dispatch/tests
+          python -m pytest -q papers/2026-ssrn-calibration-aware-risk-scheduling/tests
+      - name: Smoke reproduction 26
+        working-directory: papers/2026-energies-stepwise-conformal-dispatch
+        run: python reproduction.py --smoke --out results/ci
+      - name: Smoke reproduction 27
+        working-directory: papers/2026-ssrn-calibration-aware-risk-scheduling
+        run: python reproduction.py --smoke --out results/ci
