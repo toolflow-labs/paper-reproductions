@@ -10,6 +10,7 @@ Clean-room reproductions of research papers, with an emphasis on end-to-end pipe
 
 | Year | Paper | Status |
 |---|---|---|
+| 2016 | [Optimal Control of Energy Storage in a Microgrid by Minimizing Conditional Value-at-Risk](papers/2016-tste-cvar-storage/) | Nominal MPC / CVaR / worst-case CVaR storage-control method reproduction |
 | 2024 | [Conformal Multilayer Perceptron-Based Probabilistic Net-Load Forecasting for Low-Voltage Distribution Systems with Photovoltaic Generation](papers/2024-smartgridcomm-conformal-mlpf/) | Initial reproduction |
 | 2024 | [Conformal prediction for stochastic decision-making of PV power in electricity markets](papers/2024-epsr-conformal-pv-market-bidding/) | CP/CPS → Newsvendor/EUM/CVaR market-decision reproduction |
 | 2025 | [Mamba based adaptive conformal inference for probabilistic short-term load forecasting](papers/2025-kbs-mamba-aci/) | ACI core-method reproduction on SPS-UK |

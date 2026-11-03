@@ -1,0 +1,39 @@
+name: Smoke 2016 CVaR storage control
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'papers/2016-tste-cvar-storage/**'
+      - '.github/workflows/smoke-2016-cvar-storage.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'papers/2016-tste-cvar-storage/**'
+      - '.github/workflows/smoke-2016-cvar-storage.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test-and-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: papers/2016-tste-cvar-storage
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: papers/2016-tste-cvar-storage/requirements.txt
+      - run: python -m pip install -r requirements.txt
+      - run: python -m pytest -q tests
+      - run: python reproduction.py --smoke --include-mean --out results/smoke
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cvar-storage-smoke
+          path: papers/2016-tste-cvar-storage/results/smoke/
+          if-no-files-found: error
